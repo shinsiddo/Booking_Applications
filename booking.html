@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Street Food Menu</title>
+    <style>
+        body {
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: #0a0a0a; /* Rich black */
+            min-height: 100vh;
+            color: #f3f4f6;
+        }
+        .menu-header {
+            background: linear-gradient(90deg, #ff8800 0%, #ffb347 100%);
+            color: #fff;
+            padding: 40px 0 28px 0;
+            text-align: center;
+            letter-spacing: 2px;
+            box-shadow: 0 6px 32px rgba(255,136,0,0.18);
+            border-bottom-left-radius: 44px;
+            border-bottom-right-radius: 44px;
+        }
+        .menu-header h1 {
+            font-size: 3em;
+            margin: 0 0 10px 0;
+            font-family: 'Pacifico', cursive, sans-serif;
+            letter-spacing: 4px;
+            text-shadow: 2px 4px 24px #ffb347, 0 2px 0 #ff8800;
+            color: #fff3e0;
+        }
+        .menu-header p {
+            font-size: 1.3em;
+            margin: 0;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #fffbe7;
+            text-shadow: 0 2px 8px #ff8800;
+        }
+        #dishForm {
+            max-width: 1100px;
+            margin: 40px auto 0 auto;
+            background: linear-gradient(135deg, #18181b 0%, #232526 100%);
+            border-radius: 32px;
+            box-shadow: 0 8px 40px rgba(255,136,0,0.13), 0 2px 8px #ffb347;
+            padding: 44px 36px 36px 36px;
+        }
+        .dish-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 38px;
+            justify-content: center;
+        }
+        .dish-item {
+            background: linear-gradient(135deg, #232526 0%, #18181b 100%);
+            border-radius: 26px;
+            box-shadow: 0 4px 28px rgba(255,136,0,0.13);
+            padding: 26px 18px 20px 18px;
+            width: 240px;
+            text-align: center;
+            transition: box-shadow 0.2s, transform 0.2s;
+            position: relative;
+            border: 3px solid #ffb347;
+        }
+        .dish-item:hover {
+            box-shadow: 0 12px 36px rgba(255,136,0,0.22);
+            transform: translateY(-6px) scale(1.05);
+            border-color: #ff8800;
+        }
+        .dish-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 18px;
+            margin-bottom: 16px;
+            border: 4px solid #ff8800;
+            background: #fff;
+            box-shadow: 0 2px 14px #ffb347;
+        }
+        .dish-label {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #ffb347;
+            margin-bottom: 6px;
+            display: block;
+            letter-spacing: 1px;
+            font-family: 'Pacifico', cursive, sans-serif;
+            text-shadow: 0 2px 8px #ff8800;
+        }
+        .dish-price {
+            color: #ff8800;
+            font-weight: 700;
+            font-size: 1.13em;
+            margin-bottom: 8px;
+            display: block;
+            text-shadow: 0 2px 8px #ffb347;
+        }
+        .qty-input {
+            width: 54px;
+            margin: 0 0 0 8px;
+            border-radius: 7px;
+            border: 2px solid #ffb347;
+            padding: 5px 8px;
+            font-size: 1.08em;
+            background: #232526;
+            color: #ffb347;
+            font-weight: 600;
+        }
+        .qty-input:disabled {
+            background: #2d3748;
+            color: #a1a1aa;
+        }
+        .dish-amount {
+            margin-left: 0;
+            font-weight: 700;
+            display: block;
+            margin-top: 12px;
+            min-height: 22px;
+            font-size: 1.13em;
+        }
+        .green-amount {
+            color: #22c55e;
+        }
+        .green-amount .rs-symbol {
+            color: #fff;
+            font-weight: bold;
+        }
+        .dish-checkbox {
+            margin-bottom: 8px;
+            accent-color: #ff8800;
+            transform: scale(1.25);
+        }
+        button[type="submit"] {
+            display: block;
+            margin: 48px auto 0 auto;
+            padding: 18px 60px;
+            background: linear-gradient(90deg, #ff8800 0%, #ffb347 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255,136,0,0.13);
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px #ff8800;
+        }
+        button[type="submit"]:hover {
+            background: linear-gradient(90deg, #ff8800 0%, #ffb347 100%);
+            filter: brightness(1.1);
+            transform: scale(1.06);
+        }
+        #bookingResult {
+            margin: 48px auto 0 auto;
+            max-width: 900px;
+            background: linear-gradient(90deg, #18181b 0%, #232526 100%);
+            border: 2.5px solid #ffb347;
+            border-radius: 22px;
+            color: #ffb347;
+            font-size: 1.22em;
+            padding: 32px 40px;
+            box-shadow: 0 2px 18px rgba(255,136,0,0.11);
+        }
+        #bookingResult b {
+            color: #ff8800;
+        }
+        @media (max-width: 1100px) {
+            .dish-list { flex-direction: column; align-items: center; }
+            .dish-item { width: 95%; }
+        }
+        /* Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap');
+    </style>
+</head>
+<body>
+    <div class="menu-header">
+        <h1 style="color:#0a0a0a;">Street Food Carnival</h1>
+        <p style="color:#0a0a0a;">
+            Experience the vibrant flavors of India's favorite street food!<br>
+            <span style="font-size:1.1em;color:#0a0a0a;">Select your favorites and enjoy unlimited quantities!</span>
+        </p>
+    </div>
+    <form id="dishForm">
+        <div class="dish-list">
+            <div class="dish-item">
+                <img src="https://www.awesomecuisine.com/wp-content/uploads/2009/06/Plain-Dosa.jpg" alt="Dosa" class="dish-img">
+                <input type="checkbox" id="dish1" name="dishes" value="Dosa" class="dish-checkbox">
+                <label for="dish1" class="dish-label">Dosa</label>
+                <span class="dish-price">₹70</span>
+                <input type="number" min="1" value="1" class="qty-input" id="qty-dish1" disabled>
+                <span class="dish-amount" id="amt-dish1"></span>
+            </div>
+            <div class="dish-item">
+                <img src="https://www.cookingwithsiddhi.com/wp-content/uploads/2019/11/pav-bhaji-750x500.jpeg" alt="Pav Bhaji" class="dish-img">
+                <input type="checkbox" id="dish2" name="dishes" value="Pav Bhaji" class="dish-checkbox">
+                <label for="dish2" class="dish-label">Pav Bhaji</label>
+                <span class="dish-price">₹60</span>
+                <input type="number" min="1" value="1" class="qty-input" id="qty-dish2" disabled>
+                <span class="dish-amount" id="amt-dish2"></span>
+            </div>
+            <div class="dish-item">
+                <img src="https://rrtravelscabs.com/wp-content/uploads/2023/11/pexels-aditya-mara-17433337-1024x819.jpg" alt="Vada Pav" class="dish-img">
+                <input type="checkbox" id="dish3" name="dishes" value="Vada Pav" class="dish-checkbox">
+                <label for="dish3" class="dish-label">Vada Pav</label>
+                <span class="dish-price">₹20</span>
+                <input type="number" min="1" value="1" class="qty-input" id="qty-dish3" disabled>
+                <span class="dish-amount" id="amt-dish3"></span>
+            </div>
+            <div class="dish-item">
+                <img src="https://sausagemaker.com/wp-content/uploads/Homemade-French-Fries_8.jpg" alt="Fries" class="dish-img">
+                <input type="checkbox" id="dish4" name="dishes" value="Fries" class="dish-checkbox">
+                <label for="dish4" class="dish-label">Fries</label>
+                <span class="dish-price">₹20</span>
+                <input type="number" min="1" value="1" class="qty-input" id="qty-dish4" disabled>
+                <span class="dish-amount" id="amt-dish4"></span>
+            </div>
+            <div class="dish-item">
+                <img src="https://madhurasrecipe.com/wp-content/uploads/2023/07/Kande-Pohe-Featured.jpg" alt="Pohe" class="dish-img">
+                <input type="checkbox" id="dish5" name="dishes" value="Pohe" class="dish-checkbox">
+                <label for="dish5" class="dish-label">Pohe</label>
+                <span class="dish-price">₹30</span>
+                <input type="number" min="1" value="1" class="qty-input" id="qty-dish5" disabled>
+                <span class="dish-amount" id="amt-dish5"></span>
+            </div>
+            <div class="dish-item">
+                <img src="https://madhurasrecipe.com/wp-content/uploads/2020/10/Upit-Marathi-Recipe.jpg" alt="Upit" class="dish-img">
+                <input type="checkbox" id="dish6" name="dishes" value="Upit" class="dish-checkbox">
+                <label for="dish6" class="dish-label">Upit</label>
+                <span class="dish-price">₹30</span>
+                <input type="number" min="1" value="1" class="qty-input" id="qty-dish6" disabled>
+                <span class="dish-amount" id="amt-dish6"></span>
+            </div>
+        </div>
+        <button type="submit">Book Selected Dishes</button>
+    </form>
+
+    <div id="qrBookingSection" style="max-width: 900px; margin: 40px auto; background: linear-gradient(135deg, #18181b 0%, #232526 100%); border-radius: 20px; padding: 20px; box-shadow: 0 8px 40px rgba(255,136,0,0.13); color: #ffb347; display: flex; align-items: center; gap: 20px; display: none;">
+        <img src="qr_scanner.jpg" alt="QR Scanner" style="width: 200px; height: 200px; border-radius: 15px; box-shadow: 0 4px 20px rgba(255,136,0,0.3);" />
+        <div style="flex-grow: 1;">
+            <h2>Total Amount: ₹<span id="totalAmount">0</span></h2>
+            <form id="userDetailsForm" novalidate>
+                <label for="userName" style="font-weight: 600;">Name:</label><br />
+                <input type="text" id="userName" name="userName" required style="width: 100%; padding: 7px 10px; margin: 7px 0 15px 0; border-radius: 6px; border: 1px solid #ccc;" /><br />
+                <label for="userEmail" style="font-weight: 600;">Email:</label><br />
+                <input type="email" id="userEmail" name="userEmail" required style="width: 100%; padding: 7px 10px; margin: 7px 0 15px 0; border-radius: 6px; border: 1px solid #ccc;" /><br />
+                <label for="paymentMethod" style="font-weight: 600;">Payment Method:</label><br />
+                <select id="paymentMethod" name="paymentMethod" required style="width: 100%; padding: 7px 10px; margin: 7px 0 18px 0; border-radius: 6px; border: 1px solid #ccc;">
+                    <option value="">Select</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Card">Card</option>
+                </select><br />
+                <button type="submit" style="background: #ff8800; color: #fff; border: none; padding: 10px 30px; border-radius: 7px; font-size: 1.1em; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px;">Submit</button>
+            </form>
+            <div id="userFormResult" style="margin-top: 10px; font-weight: 600;"></div>
+        </div>
+    </div>
+
+    <div id="bookingResult"></div>
+
+    <!-- Add this modal markup just before the closing </body> tag -->
+    <div id="userModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7);">
+        <div style="background:#fff; color:#222; border-radius:18px; max-width:350px; margin:8% auto; padding:32px 28px 24px 28px; box-shadow:0 8px 40px #0008; position:relative;">
+            <h2 style="margin-top:0; color:#ff8800; text-align:center;">Complete Your Booking</h2>
+            <form id="userForm">
+                <label for="userName" style="font-weight:600;">Name:</label><br>
+                <input type="text" id="userName" name="userName" required style="width:100%;padding:7px 10px;margin:7px 0 15px 0;border-radius:6px;border:1px solid #ccc;"><br>
+                <label for="userEmail" style="font-weight:600;">Email:</label><br>
+                <input type="email" id="userEmail" name="userEmail" required style="width:100%;padding:7px 10px;margin:7px 0 15px 0;border-radius:6px;border:1px solid #ccc;"><br>
+                <label for="payment" style="font-weight:600;">Payment Method:</label><br>
+                <select id="payment" name="payment" required style="width:100%;padding:7px 10px;margin:7px 0 18px 0;border-radius:6px;border:1px solid #ccc;">
+                    <option value="">Select</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Card">Card</option>
+                </select><br>
+                <button type="submit" style="background:#ff8800;color:#fff;border:none;padding:10px 30px;border-radius:7px;font-size:1.1em;font-weight:600;cursor:pointer;width:100%;margin-top:8px;">Submit</button>
+                <button type="button" id="closeModal" style="background:#232526;color:#fff;border:none;padding:7px 18px;border-radius:7px;font-size:1em;cursor:pointer;width:100%;margin-top:10px;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- QR Scanner Modal -->
+    <div id="qrScannerModal" style="display:none; position:fixed; z-index:10000; left:0; top:5vh; width:100vw; height:95vh; background:rgba(0,0,0,0.8);">
+        <div style="background:#fff; border-radius:18px; max-width:400px; margin:0 auto; padding:20px; box-shadow:0 8px 40px #0008; position:relative; text-align:center; height: 90vh; overflow-y: auto;">
+            <h2 style="color:#ff8800; margin-bottom:20px;">Scan QR Code for Amount</h2>
+            <div id="qr-reader" style="width: 100%;"></div>
+            <button id="stopScanBtn" style="margin-top:20px; background:#ff8800; color:#fff; border:none; padding:10px 30px; border-radius:10px; font-size:1.1em; cursor:pointer;">Stop Scan</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script>
+        // Dish prices
+        const dishPrices = {
+            "Dosa": 70,
+            "Pav Bhaji": 60,
+            "Vada Pav": 20,
+            "Fries": 20,
+            "Pohe": 30,
+            "Upit": 30
+        };
+
+        // Dish keys for easy mapping
+        const dishKeys = ["Dosa", "Pav Bhaji", "Vada Pav", "Fries", "Pohe", "Upit"];
+
+        // Enable/disable quantity input based on checkbox and update amount
+        document.querySelectorAll('input[type="checkbox"][name="dishes"]').forEach((checkbox, idx) => {
+            checkbox.addEventListener('change', function() {
+                const qtyInput = document.getElementById('qty-dish' + (idx + 1));
+                if (!this.checked) {
+                    qtyInput.value = 1; // Reset to 1 when deselected
+                }
+                qtyInput.disabled = !this.checked;
+                updateDishAmount(idx + 1);
+            });
+        });
+
+        // Update amount on quantity change
+        document.querySelectorAll('.qty-input').forEach((input, idx) => {
+            input.addEventListener('input', function() {
+                updateDishAmount(idx + 1);
+            });
+        });
+
+        // Function to update the amount for a dish
+        function updateDishAmount(idx) {
+            const checkbox = document.getElementById('dish' + idx);
+            const qtyInput = document.getElementById('qty-dish' + idx);
+            const amtSpan = document.getElementById('amt-dish' + idx);
+            const dish = dishKeys[idx - 1];
+            if (checkbox.checked) {
+                const qty = parseInt(qtyInput.value) || 1;
+                amtSpan.innerHTML = `<span class="green-amount"><span class="rs-symbol">₹</span>${dishPrices[dish] * qty}</span>`;
+            } else {
+                amtSpan.textContent = '';
+            }
+        }
+
+        // Show modal and handle form submission
+        function showUserModal(onSubmit) {
+            const modal = document.getElementById('userModal');
+            modal.style.display = 'block';
+            document.getElementById('userForm').onsubmit = function(e) {
+                e.preventDefault();
+                const name = document.getElementById('userName').value.trim();
+                const email = document.getElementById('userEmail').value.trim();
+                const payment = document.getElementById('payment').value;
+                if (name && email && payment) {
+                    modal.style.display = 'none';
+                    onSubmit({ name, email, payment });
+                }
+            };
+            document.getElementById('closeModal').onclick = function() {
+                modal.style.display = 'none';
+            };
+        }
+
+        document.getElementById('dishForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const selected = [];
+            let total = 0;
+            dishKeys.forEach((dish, idx) => {
+                const cb = document.getElementById('dish' + (idx + 1));
+                const qtyInput = document.getElementById('qty-dish' + (idx + 1));
+                if (cb.checked) {
+                    const qty = parseInt(qtyInput.value) || 1;
+                    const amount = dishPrices[dish] * qty;
+                    selected.push(`${dish} x ${qty} = ₹${amount}`);
+                    total += amount;
+                }
+            });
+            if (selected.length === 0) {
+                document.getElementById('bookingResult').textContent = "Please select at least one dish to book.";
+                return;
+            }
+
+            // Show QR scanner modal first
+            // Instead, show the QR booking section with total and user details form
+            document.getElementById('qrBookingSection').style.display = 'flex';
+            document.getElementById('totalAmount').textContent = total;
+
+            // Hide the booking result message
+            document.getElementById('bookingResult').textContent = '';
+
+            // Scroll to the QR booking section
+            document.getElementById('qrBookingSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Handle user details form submission
+        document.getElementById('userDetailsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const totalAmount = document.getElementById('totalAmount').textContent;
+
+            if (!name || !email || !paymentMethod) {
+                document.getElementById('userFormResult').textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            // Prepare email content
+            const subject = encodeURIComponent('New Booking from Street Food Carnival');
+            const body = encodeURIComponent(
+                `Booking Details:\n` +
+                `Name: ${name}\n` +
+                `Email: ${email}\n` +
+                `Payment Method: ${paymentMethod}\n` +
+                `Total Amount: ₹${totalAmount}\n`
+            );
+
+            // Open mail client with prefilled email
+            window.location.href = `mailto:sssiddhantshintre632006@gmail.com?subject=${subject}&body=${body}`;
+
+            document.getElementById('userFormResult').textContent = 'Email client opened. Please send the email to complete booking.';
+        });
+    </script>
+</body>
+</html>
