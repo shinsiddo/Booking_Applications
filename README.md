@@ -40,10 +40,6 @@ It allows users to:
 
 ---
 
-## 📸 Preview
-(Add a screenshot or GIF of your app here if possible)  
-
----
 
 ## 🔮 Future Improvements
 - Backend integration for storing orders  
@@ -54,6 +50,6 @@ It allows users to:
 ---
 
 ## 👨‍💻 Author
-Developed by **[Your Name]**  
+Developed by **[Siddhant Shintre]**  
 - HTML & JS implementation by me  
 - Design and verification guided with **AI assistance**
